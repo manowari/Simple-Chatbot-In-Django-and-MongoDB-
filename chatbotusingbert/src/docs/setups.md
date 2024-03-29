@@ -20,6 +20,13 @@ or
 
 ```
 
+- install djongo `pip install djongo
+`
+
+`python manage.py makemigrations
+python manage.py migrate
+`
+
 django-admin startproject chatbotusingbert
 cd bert_qa_project
 python manage.py startapp bert_qa_app
@@ -27,3 +34,6 @@ python manage.py startapp bert_qa_app
 ```
 - Have some ready data 
 - Do Huggingface's setups for the pretrained library 
+
+
+
