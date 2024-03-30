@@ -15,6 +15,16 @@ def qa_result(request):
     if request.method == 'POST':
         question = request.POST.get('question')
         pdf_file = request.FILES['pdf_file']
+        enable_profanity_filter = request.POST.get('enable_profanity_filter', False)
+
+        # Filter out profanity from the question if profanity filter is enabled
+        if enable_profanity_filter:
+            question = filter_profanity(question)   
+    
+    
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        pdf_file = request.FILES['pdf_file']
         additional_contexts = [request.POST.get('additional_context1'), request.POST.get('additional_context2')]
 
         # Extract text from the PDF file
