@@ -36,6 +36,9 @@ python manage.py startapp bert_qa_app
 - Have some ready data 
 - Do Huggingface's setups for the pretrained library 
 
+**Modify the project as per your needs ***
+
+
 
 
 

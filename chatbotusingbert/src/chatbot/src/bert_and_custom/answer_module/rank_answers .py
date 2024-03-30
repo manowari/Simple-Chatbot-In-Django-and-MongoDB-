@@ -1,36 +1,25 @@
 from .qa_utils import answer_question
 from .pdf_utils import extract_text_from_pdf
 from .relevance_scorer import RelevanceScorer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
-def qa_result(request):
-    if request.method == 'POST':
-        question = request.POST.get('question')
-        pdf_file = request.FILES['pdf_file']
-        additional_contexts = [request.POST.get('additional_context1'), request.POST.get('additional_context2')]
+def calculate_similarity(bert_answer, context):
+    # Convert the strings into TF-IDF vectors
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform([bert_answer, context])
 
-        # Extract text from the PDF file
-        context = extract_text_from_pdf(pdf_file)
+    # Calculate cosine similarity between the vectors
+    similarity_matrix = cosine_similarity(tfidf_matrix)
+    
+    # Cosine similarity matrix will be a 2x2 matrix
+    # The similarity score is at index [0, 1] or [1, 0]
+    similarity_score = similarity_matrix[0, 1]
 
-        # Use BERT to answer the question
-        bert_answer = answer_question(question, context)
+    return similarity_score
 
-        # Initialize RelevanceScorer and calculate relevance score
-        scorer = RelevanceScorer()
-        relevance_score = scorer.calculate_relevance_score(bert_answer, context)
-
-        # Define thresholds for relevance score
-        if relevance_score < 0.3:  # Low relevance
-            cautionary_response = "The relevance score is low. Here's an alternative answer from the extracted data."
-            alternative_answer = find_alternative_answer(question, context)
-            return render(request, 'result.html', {'answer': cautionary_response, 'alternative_answer': alternative_answer})
-        elif relevance_score < 0.7:  # Average relevance
-            bert_answer = "BERT Answer: " + bert_answer
-            alternative_answer = find_alternative_answer(question, context)
-            return render(request, 'result.html', {'answer': bert_answer, 'alternative_answer': alternative_answer})
-        else:  # High relevance
-            return render(request, 'result.html', {'answer': bert_answer})
-
-    return render(request, 'home.html')
+ 
 
 
 
