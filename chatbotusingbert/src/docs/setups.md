@@ -5,7 +5,7 @@ for python virtual env use
  
 `venv\Scripts\activate`
 
-or  
+or  if proj doesnt run 
 
 `python -m venv venv	`
 or
@@ -15,8 +15,9 @@ or
 
 
 
-- modularize your project using init.py
+- modularize your project using `__init__.py`
 
+also you can do installations:-
 
 ```
 

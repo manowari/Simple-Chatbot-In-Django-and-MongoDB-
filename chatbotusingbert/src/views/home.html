@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERT QA System</title>
+    <style>
+        /* Switch styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>BERT QA System</h1>
+    <form action="{% url 'qa_result' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="pdf_file">Upload PDF File:</label>
+        <input type="file" name="pdf_file" id="pdf_file" accept=".pdf"><br><br>
+        <label for="question">Enter your question:</label>
+        <input type="text" name="question" id="question" required><br><br>
+        <!-- AI Assistance Switch -->
+        <label class="switch">
+            <input type="checkbox" name="enable_ai" id="enable_ai">
+            <span class="slider round"></span>
+        </label>
+        <label for="enable_ai">Use AI Assistance</label><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Function to toggle AI Assistance switch
+        document.getElementById('enable_ai').addEventListener('change', function() {
+            var form = this.form;
+            if (this.checked) {
+                form.setAttribute('action', '{% url "qa_result" %}?enable_ai=true');
+            } else {
+                form.setAttribute('action', '{% url "qa_result" %}');
+            }
+        });
+    </script>
+</body>
+</html>

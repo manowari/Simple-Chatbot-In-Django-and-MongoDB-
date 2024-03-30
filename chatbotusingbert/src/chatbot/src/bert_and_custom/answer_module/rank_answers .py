@@ -1,14 +1,5 @@
-from django.shortcuts import render
 from .qa_utils import answer_question
 from .pdf_utils import extract_text_from_pdf
-
-def home(request):
-    return render(request, 'home.html')
-
-from .qa_utils import answer_question
-from .pdf_utils import extract_text_from_pdf
-from .fuzzy_search import fuzzy_search
-from .non_ai_features import find_longest_sentence, count_sentences, find_keywords_in_context
 from .relevance_scorer import RelevanceScorer
 
 def qa_result(request):
@@ -20,27 +11,7 @@ def qa_result(request):
         # Extract text from the PDF file
         context = extract_text_from_pdf(pdf_file)
 
-        # Fuzzy search
-        fuzzy_answer = fuzzy_search(question, context)
-
-        if fuzzy_answer:
-            longest_sentence = find_longest_sentence(context)
-            num_sentences = count_sentences(context)
-            keywords_in_context = find_keywords_in_context(question, context)
-
-            return render(request, 'result.html', {
-                'answer': fuzzy_answer,
-                'longest_sentence': longest_sentence,
-                'num_sentences': num_sentences,
-                'keywords_in_context': keywords_in_context
-            })
-
-        # Use AI-based search system if enabled
-        if request.POST.get('enable_ai'):
-            ai_answer = ai_optimized_search(question, context)
-            return render(request, 'result.html', {'answer': ai_answer})
-
-        # Default: Use BERT QA system
+        # Use BERT to answer the question
         bert_answer = answer_question(question, context)
 
         # Initialize RelevanceScorer and calculate relevance score
@@ -61,3 +32,18 @@ def qa_result(request):
 
     return render(request, 'home.html')
 
+
+
+def rank_answers(bert_answer, additional_contexts):
+    ranked_answers = []
+
+    # Apply custom logic to rank answers based on additional context
+    for context in additional_contexts:
+        # Implement your custom logic here (e.g., similarity scoring)
+        relevance_score = calculate_similarity(bert_answer, context)
+        ranked_answers.append((bert_answer, relevance_score))
+
+    # Sort answers based on relevance score
+    ranked_answers.sort(key=lambda x: x[1], reverse=True)
+    
+    return ranked_answers

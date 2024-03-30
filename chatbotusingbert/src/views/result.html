@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranked QA Result</title>
+</head>
+<body>
+    <h1>Ranked QA Result</h1>
+    <ol>
+    {% for answer, relevance_score in ranked_answers %}
+        <li>{{ answer }} (Relevance Score: {{ relevance_score }})</li>
+    {% endfor %}
+    </ol>
+    <a href="{% url 'home' %}">Ask Another Question</a>
+</body>
+</html>
