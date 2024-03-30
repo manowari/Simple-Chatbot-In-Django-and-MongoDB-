@@ -1,11 +1,6 @@
 from django.shortcuts import render
 from .qa_utils import answer_question
 from .pdf_utils import extract_text_from_pdf
-from .qa_utils import answer_question
-from .pdf_utils import extract_text_from_pdf
-from .fuzzy_search import fuzzy_search
-from .non_ai_features import find_longest_sentence, count_sentences, find_keywords_in_context
-from .relevance_scorer import RelevanceScorer
 
 def home(request):
     return render(request, 'home.html')
