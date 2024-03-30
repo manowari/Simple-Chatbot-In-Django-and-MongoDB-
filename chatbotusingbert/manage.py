@@ -34,6 +34,5 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'your_app', 'views')],  # Add the path to the "views" subfolder
         'APP_DIRS': True,
-        ...
     },
 ]
